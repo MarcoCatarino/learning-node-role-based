@@ -13,16 +13,20 @@ export const verifyToken = (req, res, next) => {
       return res
         .status(401)
         .json({ message: "No token, Authorization Denied!" });
-  }
 
-  try {
-    const decode = jwt.verify(token, ENV.JWT_SECRET);
-    req.user = decode;
+    try {
+      const decode = jwt.verify(token, ENV.JWT_SECRET);
+      req.user = decode;
 
-    console.log("The decode user is: ", req.user);
+      console.log("The decode user is: ", req.user);
 
-    next();
-  } catch (error) {
-    res.statu(400).json({ meesage: "Token is Not Valid!" });
+      next();
+    } catch (error) {
+      res.status(400).json({ meesage: "Token is Not Valid!" });
+    }
+  } else {
+    return res
+      .status(401)
+      .json({ message: "No token, Authorization Denied! (else)" });
   }
 };
